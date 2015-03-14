@@ -36,30 +36,62 @@ void drawCircle(float cx, float cy, float r, int num_segments)
 void drawMultipleCircles(float cx, float cy, float r, int num_segments)
 {
     drawCircle(cx, cy, r, num_segments);
-    if ((cx - 4*r >= -screen_ratio) && (cx + 4*r <= screen_ratio))
-    {
-        if (cx == 0)
-        {
-            drawMultipleCircles(cx - 3*r, cy, r, num_segments);
-            drawMultipleCircles(cx + 3*r, cy, r, num_segments); 
-        }
-        else if (cx < 0)
-            drawMultipleCircles(cx - 3*r, cy, r, num_segments);
-        else if (cx > 0)
-            drawMultipleCircles(cx + 3*r, cy, r, num_segments);
-    }
 
-    if ((cy - 4*r >= -1.0f) && (cy + 4*r <= 1.0f))
+    if (window_width >= window_height)
     {
-        if (cy == 0)
+        if ((cx - 4*r >= -screen_ratio) && (cx + 4*r <= screen_ratio))
         {
-            drawMultipleCircles(cx, cy - 3*r, r, num_segments);
-            drawMultipleCircles(cx, cy + 3*r, r, num_segments);
+            if (cx == 0)
+            {
+                drawMultipleCircles(cx - 3*r, cy, r, num_segments);
+                drawMultipleCircles(cx + 3*r, cy, r, num_segments); 
+            }
+            else if (cx < 0)
+                drawMultipleCircles(cx - 3*r, cy, r, num_segments);
+            else if (cx > 0)
+                drawMultipleCircles(cx + 3*r, cy, r, num_segments);
         }
-        else if (cy < 0)
-            drawMultipleCircles(cx, cy - 3*r, r, num_segments);
-        else if (cy > 0)
-            drawMultipleCircles(cx, cy + 3*r, r, num_segments);
+
+        if ((cy - 4*r >= -1.0f) && (cy + 4*r <= 1.0f))
+        {
+            if (cy == 0)
+            {
+                drawMultipleCircles(cx, cy - 3*r, r, num_segments);
+                drawMultipleCircles(cx, cy + 3*r, r, num_segments);
+            }
+            else if (cy < 0)
+                drawMultipleCircles(cx, cy - 3*r, r, num_segments);
+            else if (cy > 0)
+                drawMultipleCircles(cx, cy + 3*r, r, num_segments);
+        }
+    } 
+    else
+    {
+        if ((cx - 4*r >= -1.0f) && (cx + 4*r <= 1.0f))
+        {
+            if (cx == 0)
+            {
+                drawMultipleCircles(cx - 3*r, cy, r, num_segments);
+                drawMultipleCircles(cx + 3*r, cy, r, num_segments); 
+            }
+            else if (cx < 0)
+                drawMultipleCircles(cx - 3*r, cy, r, num_segments);
+            else if (cx > 0)
+                drawMultipleCircles(cx + 3*r, cy, r, num_segments);
+        }
+
+        if ((cy - 4*r >= -screen_ratio) && (cy + 4*r <= screen_ratio))
+        {
+            if (cy == 0)
+            {
+                drawMultipleCircles(cx, cy - 3*r, r, num_segments);
+                drawMultipleCircles(cx, cy + 3*r, r, num_segments);
+            }
+            else if (cy < 0)
+                drawMultipleCircles(cx, cy - 3*r, r, num_segments);
+            else if (cy > 0)
+                drawMultipleCircles(cx, cy + 3*r, r, num_segments);
+        }   
     }
 }
 
