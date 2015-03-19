@@ -6,7 +6,7 @@
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 
-#define NUM_SEG 3
+#define NUM_SEG 30
 #define PI 3.1415926f
 
 #define X_MAX 50
