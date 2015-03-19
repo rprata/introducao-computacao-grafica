@@ -6,9 +6,10 @@
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 
+#define NUM_SEG 3
 #define PI 3.1415926f
 
-#define X_MAX 100
+#define X_MAX 50
 
 float ratio = 0.5;
 
@@ -16,26 +17,35 @@ int window_width;
 int window_height;
 float screen_ratio;
 
-void drawCircle(float cx, float cy, float r, int num_segments) 
-{ 
-    glColor3f(0.0, 0.0, 0.0); 
-    glBegin(GL_POLYGON); 
-    for(int i = 0; i < num_segments; i++) 
-    { 
-        float theta = 2.0f * PI * (float )i / (float) num_segments;
+float vertex_array[2 * NUM_SEG];
 
-        float x = r * cosf(theta);
-        float y = r * sinf(theta);
-
-        glVertex2f(x + cx, y + cy);
-
-    } 
-    glEnd(); 
+void createVertexArray()
+{
+    for (int i = 0; i < NUM_SEG; i++)
+    {
+        float theta = 2.0f * PI * (float )i / (float) NUM_SEG;
+        vertex_array[2 * i] = cosf(theta);
+        vertex_array[2 * i + 1] = sinf(theta);
+    }
 }
 
-void drawMultipleCircles(float cx, float cy, float r, int num_segments)
+void drawCircle(float cx, float cy, float r) 
 {
-    drawCircle(cx, cy, r, num_segments);
+    float v[2 * NUM_SEG];
+    glEnableClientState(GL_VERTEX_ARRAY);
+    for(int i = 0; i < NUM_SEG; i++) 
+    {
+        v[2 * i] = r * vertex_array[2 * i] + cx;
+        v[2 * i + 1] = r * vertex_array[2 * i + 1] + cy;
+    }
+    glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), v);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, NUM_SEG);
+    glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void drawMultipleCircles(float cx, float cy, float r)
+{
+    drawCircle(cx, cy, r);
 
     if (window_width >= window_height)
     {
@@ -43,54 +53,54 @@ void drawMultipleCircles(float cx, float cy, float r, int num_segments)
         {
             if (cx == 0)
             {
-                drawMultipleCircles(cx - 3*r, cy, r, num_segments);
-                drawMultipleCircles(cx + 3*r, cy, r, num_segments); 
+                drawMultipleCircles(cx - 3*r, cy, r);
+                drawMultipleCircles(cx + 3*r, cy, r); 
             }
             else if (cx < 0)
-                drawMultipleCircles(cx - 3*r, cy, r, num_segments);
+                drawMultipleCircles(cx - 3*r, cy, r);
             else if (cx > 0)
-                drawMultipleCircles(cx + 3*r, cy, r, num_segments);
+                drawMultipleCircles(cx + 3*r, cy, r);
         }
 
         if ((cy - 4*r >= -1.0f) && (cy + 4*r <= 1.0f))
         {
             if (cy == 0)
             {
-                drawMultipleCircles(cx, cy - 3*r, r, num_segments);
-                drawMultipleCircles(cx, cy + 3*r, r, num_segments);
+                drawMultipleCircles(cx, cy - 3*r, r);
+                drawMultipleCircles(cx, cy + 3*r, r);
             }
             else if (cy < 0)
-                drawMultipleCircles(cx, cy - 3*r, r, num_segments);
+                drawMultipleCircles(cx, cy - 3*r, r);
             else if (cy > 0)
-                drawMultipleCircles(cx, cy + 3*r, r, num_segments);
+                drawMultipleCircles(cx, cy + 3*r, r);
         }
-    } 
+    }
     else
     {
         if ((cx - 4*r >= -1.0f) && (cx + 4*r <= 1.0f))
         {
             if (cx == 0)
             {
-                drawMultipleCircles(cx - 3*r, cy, r, num_segments);
-                drawMultipleCircles(cx + 3*r, cy, r, num_segments); 
+                drawMultipleCircles(cx - 3*r, cy, r);
+                drawMultipleCircles(cx + 3*r, cy, r); 
             }
             else if (cx < 0)
-                drawMultipleCircles(cx - 3*r, cy, r, num_segments);
+                drawMultipleCircles(cx - 3*r, cy, r);
             else if (cx > 0)
-                drawMultipleCircles(cx + 3*r, cy, r, num_segments);
+                drawMultipleCircles(cx + 3*r, cy, r);
         }
 
         if ((cy - 4*r >= -screen_ratio) && (cy + 4*r <= screen_ratio))
         {
             if (cy == 0)
             {
-                drawMultipleCircles(cx, cy - 3*r, r, num_segments);
-                drawMultipleCircles(cx, cy + 3*r, r, num_segments);
+                drawMultipleCircles(cx, cy - 3*r, r);
+                drawMultipleCircles(cx, cy + 3*r, r);
             }
             else if (cy < 0)
-                drawMultipleCircles(cx, cy - 3*r, r, num_segments);
+                drawMultipleCircles(cx, cy - 3*r, r);
             else if (cy > 0)
-                drawMultipleCircles(cx, cy + 3*r, r, num_segments);
+                drawMultipleCircles(cx, cy + 3*r, r);
         }   
     }
 }
@@ -119,7 +129,8 @@ void myDisplay(void)
 {
     glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT);
-    drawMultipleCircles(0.0, 0.0, ratio, 50);
+    glColor3f(0.0, 0.0, 0.0);  
+    drawMultipleCircles(0.0, 0.0, ratio);
     glutSwapBuffers(); 
 
 }
@@ -135,6 +146,7 @@ void myMouseMotion(int x, int y)
 
 int main(int argc, char** argv)
 {
+    createVertexArray();
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
