@@ -6,7 +6,7 @@
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 
-#define NUM_SEG 30
+#define NUM_SEG 50
 #define PI 3.1415926f
 
 #define X_MAX 50
@@ -31,15 +31,13 @@ void createVertexArray()
 
 void drawCircle(float cx, float cy, float r) 
 {
-    float v[2 * NUM_SEG];
     glEnableClientState(GL_VERTEX_ARRAY);
-    for(int i = 0; i < NUM_SEG; i++) 
-    {
-        v[2 * i] = r * vertex_array[2 * i] + cx;
-        v[2 * i + 1] = r * vertex_array[2 * i + 1] + cy;
-    }
-    glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), v);
+    glPushMatrix();
+    glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), vertex_array);
+    glTranslatef(cx, cy, 0);
+    glScalef(r, r, 1);
     glDrawArrays(GL_TRIANGLE_FAN, 0, NUM_SEG);
+    glPopMatrix();
     glDisableClientState(GL_VERTEX_ARRAY);
 }
 
