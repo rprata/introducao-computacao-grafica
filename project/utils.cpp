@@ -42,14 +42,3 @@ int load_texture (const char * filename,
   jpeg_destroy_decompress (&cinfo);
   return 0;
 }
-
-float * crossProduct(float b[3], float c[3]) 
-{
-    float n[3];
-    //float length;
-    n[0] = b[1] * c[2] - c[1] * b[2];
-    n[1] = b[2] * c[0] - c[2] * b[0];
-    n[2] = b[0] * c[1] - c[0] * b[1];
-
-    return n;
-}

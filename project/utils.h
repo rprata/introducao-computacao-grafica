@@ -11,6 +11,5 @@
 #include <jerror.h>
 
 int load_texture (const char * filename, unsigned char * dest, const int format, const unsigned int size);
-float * crossProduct(float b[3], float c[3]);
 
 #endif
