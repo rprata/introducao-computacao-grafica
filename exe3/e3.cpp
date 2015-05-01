@@ -9,7 +9,7 @@
 #define NUM_SEG 50
 #define PI 3.1415926f
 
-#define X_MAX 50
+#define X_MAX 0.01
 
 float ratio = 0.5;
 
